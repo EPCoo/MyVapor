@@ -1,10 +1,10 @@
 import Vapor
 import Fluent
 
-final class User: Model {
+final class Dog: Model {
     var id: Node?
     var name: String
-    
+
     init(name: String) {
         self.name = name
     }
@@ -16,15 +16,19 @@ final class User: Model {
 
     func makeNode() throws -> Node {
         return try Node(node: [
+            "id": id,
             "name": name
-        ])
+            ])
     }
 
     static func prepare(_ database: Database) throws {
-        //
+        try database.create("Dogs") { Dog in
+            Dog.id()
+            Dog.string("name")
+        }
     }
 
     static func revert(_ database: Database) throws {
-        //
+        try database.delete("Dogs")
     }
 }
